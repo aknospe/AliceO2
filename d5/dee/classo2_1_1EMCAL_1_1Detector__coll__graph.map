@@ -1,0 +1,7 @@
+<map id="o2::EMCAL::Detector" name="o2::EMCAL::Detector">
+<area shape="rect" id="node2" href="$d4/d8a/classo2_1_1Base_1_1DetImpl.html" title="{o2::Base::DetImpl\&lt;\l Detector \&gt;\n||+ updateHitTrackIndices()\l}" alt="" coords="93,755,267,847"/>
+<area shape="rect" id="node3" href="$d7/d02/classo2_1_1Base_1_1Detector.html" title="{o2::Base::Detector\n||+ Detector()\l+ Detector()\l+ ~Detector()\l+ Material()\l+ Mixture()\l+ Medium()\l+ Matrix()\l+ defineWrapperVolume()\l+ setNumberOfWrapperVolumes()\l+ defineLayer()\l+ defineLayerTurbo()\l+ getMaterialID()\l+ getMediumID()\l+ getMediumIDMappingAsVector()\l+ addNameTo()\l+ updateHitTrackIndices()\l+ GetCollection()\l+ setDensityFactor()\l+ getDensityFactor()\l+ initFieldTrackingParams()\l# Detector()\l# operator=()\l}" alt="" coords="43,161,265,546"/>
+<area shape="rect" id="node7" href="$d4/d8a/classo2_1_1Base_1_1DetImpl.html" title="{o2::Base::DetImpl\&lt;\l Det \&gt;\n||+ updateHitTrackIndices()\l}" alt="" coords="176,598,349,690"/>
+<area shape="rect" id="node4" href="$d6/d0c/classFairDetector.html" title="{FairDetector\n||}" alt="" coords="5,5,99,83"/>
+<area shape="rect" id="node5" href="$d9/d7d/classFloat__t.html" title="{Float_t\n||}" alt="" coords="123,5,185,83"/>
+</map>

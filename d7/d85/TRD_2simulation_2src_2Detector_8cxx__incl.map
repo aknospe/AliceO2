@@ -1,0 +1,15 @@
+<map id="/home/travis/build/AliceO2Group/AliceO2/Detectors/TRD/simulation/src/Detector.cxx" name="/home/travis/build/AliceO2Group/AliceO2/Detectors/TRD/simulation/src/Detector.cxx">
+<area shape="rect" id="node2" href="$df/df0/TRD_2simulation_2include_2TRDSimulation_2Detector_8h.html" title="TRDSimulation/Detector.h" alt="" coords="1521,133,1697,160"/>
+<area shape="rect" id="node29" href="$da/d32/TRDCommonParam_8h.html" title="TRDBase/TRDCommonParam.h" alt="" coords="717,133,931,160"/>
+<area shape="rect" id="node31" href="$dd/d07/TRDGeometry_8h.html" title="TRDBase/TRDGeometry.h" alt="" coords="1207,224,1387,251"/>
+<area shape="rect" id="node32" href="$dc/db6/Stack_8h.html" title="Definition of the Stack class. " alt="" coords="1889,126,2041,167"/>
+<area shape="rect" id="node4" href="$d1/d3a/Base_2include_2DetectorsBase_2Detector_8h.html" title="DetectorsBase/Detector.h" alt="" coords="1450,224,1624,251"/>
+<area shape="rect" id="node14" href="$d4/d25/BaseHits_8h.html" title="SimulationDataFormat\l/BaseHits.h" alt="" coords="860,217,1012,258"/>
+<area shape="rect" id="node15" href="$dd/d76/Cartesian3D_8h.html" title="MathUtils/Cartesian3D.h" alt="" coords="741,307,907,333"/>
+<area shape="rect" id="node22" href="$d2/dd0/Cartesian2D_8h.html" title="MathUtils/Cartesian2D.h" alt="" coords="853,389,1019,416"/>
+<area shape="rect" id="node30" href="$d9/df4/TRDSimParam_8h.html" title="TRDBase/TRDSimParam.h" alt="" coords="652,224,836,251"/>
+<area shape="rect" id="node34" href="$d2/de2/MCTrack_8h.html" title="Definition of the MCTrack class. " alt="" coords="2204,217,2356,258"/>
+<area shape="rect" id="node38" href="$d6/d31/DetID_8h.html" title="DetectorsBase/DetID.h" alt="" coords="2875,307,3033,333"/>
+<area shape="rect" id="node41" href="$d9/ded/Utils_8h.html" title="DetectorsBase/Utils.h" alt="" coords="2935,389,3085,416"/>
+<area shape="rect" id="node42" href="$d1/daa/Base_2include_2DetectorsBase_2Constants_8h.html" title="DetectorsBase/Constants.h" alt="" coords="3055,480,3239,507"/>
+</map>

@@ -1,0 +1,30 @@
+digraph "o2::field::MagneticField"
+{
+ // INTERACTIVE_SVG=YES
+  bgcolor="transparent";
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{o2::field::MagneticField\n|# mDipoleField\l|+ MagneticField()\l+ MagneticField()\l+ MagneticField()\l+ operator=()\l+ ~MagneticField()\l+ CreateField()\l+ AllowFastField()\l+ GetBx()\l+ GetBy()\l+ GetBz()\l+ Field()\l+ GetBxyz()\l+ FillParContainer()\l+ getTPCIntegral()\l+ getTPCRatIntegral()\l+ getTPCIntegralCylindrical()\l+ getTPCRatIntegralCylindrical()\l+ getBz()\l+ getMeasuredMap()\l+ getFastField()\l+ setFactorSolenoid()\l+ setFactorDipole()\l+ getFactorSolenoid()\l+ getFactorDipole()\l+ Factor()\l+ getCurrentSolenoid()\l+ getCurrentDipole()\l+ IsUniform()\l+ MachineField()\l+ getMapType()\l+ getBeamType()\l+ getBeamTypeText()\l+ getBeamEnergy()\l+ Max()\l+ Integral()\l+ precIntegral()\l+ solenoidField()\l+ getDataFileName()\l+ getParameterName()\l+ setDataFileName()\l+ setParameterName()\l+ Print()\l+ loadParameterization()\l+ getPolarityConvention()\l+ createFieldMap()\l# initializeMachineField()\l# setBeamType()\l# setBeamEnergy()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{FairField\n||}",height=0.2,width=0.4,color="black",URL="$dc/ddd/classFairField.html"];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mLogger" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{FairLogger *\n||}",height=0.2,width=0.4,color="grey75"];
+  Node4 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mParameterNames" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{TNamed\n||}",height=0.2,width=0.4,color="grey75"];
+  Node5 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mMeasuredMap" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{unique_ptr\< o2::field\l::MagneticWrapperChebyshev \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node6 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mBeamType" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{BeamType_t\n||}",height=0.2,width=0.4,color="grey75"];
+  Node7 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mMapType" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{BMap_t\n||}",height=0.2,width=0.4,color="grey75"];
+  Node8 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mQuadrupoleGradient\n#mMaxField\n#mMultipicativeFactorDipole\n#sSolenoidToDipoleZ\n#mMultipicativeFactorSolenoid\n#mSolenoid\n#mBeamEnergy\n#mCompensatorField2A\n#mCompensatorField1A\n#mCompensatorField2C\n..." ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{Double_t\n||}",height=0.2,width=0.4,color="grey75"];
+  Node9 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #sPolarityConvention" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node9 [label="{static const UShort_t\n||}",height=0.2,width=0.4,color="grey75"];
+  Node10 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mFastField" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node10 [label="{unique_ptr\< o2::field\l::MagFieldFast \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node11 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mDipoleOnOffFlag" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node11 [label="{Bool_t\n||}",height=0.2,width=0.4,color="grey75"];
+  Node12 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #mPrecisionInteg\n#mDefaultIntegration" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node12 [label="{Int_t\n||}",height=0.2,width=0.4,color="grey75"];
+}

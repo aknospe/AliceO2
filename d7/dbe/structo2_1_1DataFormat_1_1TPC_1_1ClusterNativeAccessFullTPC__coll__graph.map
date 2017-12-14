@@ -1,0 +1,4 @@
+<map id="o2::DataFormat::TPC::ClusterNativeAccessFullTPC" name="o2::DataFormat::TPC::ClusterNativeAccessFullTPC">
+<area shape="rect" id="node2" href="$da/dad/structo2_1_1DataFormat_1_1TPC_1_1ClusterNative.html" title="{o2::DataFormat::TPC\l::ClusterNative\n||+ getFlags()\l+ getTimePacked()\l+ setTimePackedFlags()\l+ setTimePacked()\l+ setFlags()\l+ getTime()\l+ setTime()\l+ setTimeFlags()\l+ getPad()\l+ setPad()\l+ getSigmaTime2()\l+ setSigmaTime2()\l+ getSigmaPad2()\l+ setSigmaPad2()\l}" alt="" coords="169,189,333,472"/>
+<area shape="rect" id="node4" href="$d4/dc3/classfloat.html" title="{float\n||}" alt="" coords="133,5,179,83"/>
+</map>

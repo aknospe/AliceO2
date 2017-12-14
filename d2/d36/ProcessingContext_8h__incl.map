@@ -1,0 +1,17 @@
+<map id="/home/travis/build/AliceO2Group/AliceO2/Framework/Core/include/Framework/ProcessingContext.h" name="/home/travis/build/AliceO2Group/AliceO2/Framework/Core/include/Framework/ProcessingContext.h">
+<area shape="rect" id="node2" href="$d6/d5c/InputRecord_8h.html" title="Framework/InputRecord.h" alt="" coords="778,125,951,152"/>
+<area shape="rect" id="node27" href="$d8/d17/ServiceRegistry_8h.html" title="Framework/ServiceRegistry.h" alt="" coords="1508,125,1703,152"/>
+<area shape="rect" id="node31" href="$d1/d28/DataAllocator_8h.html" title="Framework/DataAllocator.h" alt="" coords="2396,125,2578,152"/>
+<area shape="rect" id="node3" href="$d5/dfb/DataRef_8h.html" title="Framework/DataRef.h" alt="" coords="624,275,774,301"/>
+<area shape="rect" id="node4" href="$d5/db8/DataRefUtils_8h.html" title="Framework/DataRefUtils.h" alt="" coords="487,200,666,227"/>
+<area shape="rect" id="node11" href="$d8/d3c/TMessageSerializer_8h.html" title="Framework/TMessageSerializer.h" alt="" coords="50,275,267,301"/>
+<area shape="rect" id="node20" href="$d5/d19/InputRoute_8h.html" title="Framework/InputRoute.h" alt="" coords="902,200,1068,227"/>
+<area shape="rect" id="node5" href="$dc/dcd/DataHeader_8h.html" title="Headers/DataHeader.h" alt="" coords="717,349,872,376"/>
+<area shape="rect" id="node21" href="$d5/d3f/InputSpec_8h.html" title="Framework/InputSpec.h" alt="" coords="949,275,1110,301"/>
+<area shape="rect" id="node33" href="$d6/df4/OutputRoute_8h.html" title="Framework/OutputRoute.h" alt="" coords="2172,200,2348,227"/>
+<area shape="rect" id="node35" href="$d7/d31/DataChunk_8h.html" title="Framework/DataChunk.h" alt="" coords="2706,200,2874,227"/>
+<area shape="rect" id="node36" href="$dc/dc4/MessageContext_8h.html" title="Framework/MessageContext.h" alt="" coords="2525,275,2726,301"/>
+<area shape="rect" id="node38" href="$d2/d80/RootObjectContext_8h.html" title="Framework/RootObjectContext.h" alt="" coords="2750,275,2964,301"/>
+<area shape="rect" id="node40" href="$d0/d95/TypeTraits_8h.html" title="Framework/TypeTraits.h" alt="" coords="1882,200,2046,227"/>
+<area shape="rect" id="node34" href="$db/d2d/OutputSpec_8h.html" title="Framework/OutputSpec.h" alt="" coords="2127,275,2298,301"/>
+</map>
