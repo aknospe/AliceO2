@@ -33,16 +33,16 @@ class Cell
 
   void setAmplitudeToADC(Double_t amplitude);
   void setADC(Short_t adc);
-  Short_t getADC();
+  Short_t getADC() const;
 
   void setTime(Double_t time);
-  Short_t getTime();
+  Short_t getTime() const;
 
   void setTower(Short_t tower);
-  Short_t getTower();
+  Short_t getTower() const;
 
   void setLong(ULong_t l);
-  ULong_t getLong() { return mBits.to_ulong(); }
+  ULong_t getLong() const { return mBits.to_ulong(); }
 
   void PrintStream(std::ostream& stream) const;
 

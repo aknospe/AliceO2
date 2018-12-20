@@ -26,71 +26,71 @@ ClassImp(Cell)
 void Cell::setAmplitudeToADC(Double_t amplitude)
 {
   ULong_t a = 0;
-  if (amplitude > 1023*0.0167) a=1023;
+    if (amplitude > 0x3ff*(constants::EMCAL_ADCENERGY)) a=0x3ff;
   else if (amplitude < 0) a=0;
-  else a = (ULong_t) (amplitude/0.0167);
+  else a = (ULong_t) (amplitude/(constants::EMCAL_ADCENERGY));
 
   a <<= 25;
   std::bitset<40> b1(a);
-  std::bitset<40> b2 = mBits & 0x1ffffff; // mBits & (2^25 - 1)
-  mBits = b1 + b2;
+  std::bitset<40> b2(0x1ffffff); // (2^25 - 1)
+  mBits = b1 + (mBits & b2);
 }
 
 void Cell::setADC(Short_t adc)
 {
-  if (adc > 1023) adc = 1023;
+  if (adc > 0x3ff) adc = 0x3ff;
   else if (adc < 0) adc = 0;
   ULong_t a = (Ulong_t) adc;
 
   a <<= 25;
   std::bitset<40> b1(a);
-  std::bitset<40> b2 = mBits & 0x1ffffff; // mBits & (2^25 - 1)
-  mBits = b1 + b2;
+  std::bitset<40> b2(0x1ffffff); // (2^25 - 1)
+  mBits = b1 + (mBits & b2);
 }
 
-Short_t Cell::getADC()
+Short_t Cell::getADC() const
 {
   ULong_t a = getLong();
   a >>= 25;
-  a &= 1023;
+  a &= 0x3ff;
   return ((Short_t) a);
 }
 
 void Cell::setTime(Double_t time)
 {
   ULong_t t = 0;
-  if (time > 511) t=511;
+  if (time > 0x1ff) t=0x1ff;
   else if (time < 0) t=0;
   else t = (ULong_t) time;
 
   t <<= 16;
   std::bitset<40> b1(t);
-  std::bitset<40> b2 = mBits & 34326249471; // mBits & 0000011111111110000000001111111111111111
-  mBits = b1 + b2;
+  std::bitset<40> b2(0x07fe00ffff); // 0000011111111110000000001111111111111111
+  mBits = b1 + (mBits & b2);
 }
 
-Short_t Cell::getTime()
+Short_t Cell::getTime() const
 {
   ULong_t t = getLong();
   t >>= 16;
-  t &= 511;
+  t &= 0x1ff;
   return ((Short_t) t);
 }
 
 void Cell::setTower(Short_t tower)
 {
-  if (tower > 32767 || tower < 0) tower = 32767;
+  if (tower > 0x7fff || tower < 0) tower = 0x7fff;
   ULong_t t = (ULong_t) tower;
 
   std::bitset<40> b1(t);
-  std::bitset<40> b2 = mBits & 34359672832; // mBits & 0000011111111111111111110000000000000000
-  mBits = b1 + b2;
+  std::bitset<40> b2(0x07ffff0000); // 0000011111111111111111110000000000000000
+  mBits = b1 + (mBits & b2);
 }
 
-Short_t Cell::getTower()
+Short_t Cell::getTower() const
 {
   ULong_t t = getLong();
-  t &= 32767;
+  t &= 0x7fff;
   return ((Short_t) t);
 }
 
