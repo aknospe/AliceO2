@@ -23,7 +23,6 @@ namespace EMCAL
 class SimParam
 {
  public:
-  SimParam() = default;
   ~SimParam() = default;
 
   static SimParam* GetInstance()
@@ -76,6 +75,8 @@ class SimParam
   void PrintStream(std::ostream& stream) const;
 
  private:
+
+  SimParam() = default;
 
   static o2::EMCAL::SimParam* mSimParam{ 0 }; // pointer to the unique instance of the class
 
