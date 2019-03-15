@@ -9,6 +9,7 @@
 // or submit itself to any jurisdiction.
 
 #include "EMCALSimulation/Digitizer.h"
+#include "EMCALSimulation/SimParam.h"
 #include "EMCALBase/Digit.h"
 #include "EMCALBase/Geometry.h"
 #include "EMCALBase/GeometryBase.h"
@@ -16,9 +17,10 @@
 #include "MathUtils/Cartesian3D.h"
 #include "SimulationDataFormat/MCCompLabel.h"
 
-#include <TRandom.h>
 #include <climits>
 #include <forward_list>
+#include <chrono>
+#include <TRandom.h>
 #include "FairLogger.h" // for LOG
 
 ClassImp(o2::EMCAL::Digitizer);
@@ -29,7 +31,11 @@ using o2::EMCAL::Hit;
 using namespace o2::EMCAL;
 
 //_______________________________________________________________________
-void Digitizer::init() {}
+void Digitizer::init()
+{
+  mSimParam = SimParam::GetInstance();
+  mRandomGenerator = new TRandom3( std::chrono::high_resolution_clock::now().time_since_epoch().count() );
+}
 
 //_______________________________________________________________________
 void Digitizer::finish() {}
@@ -107,6 +113,14 @@ void Digitizer::fillOutputContainer(std::vector<Digit>& digits)
 
   for (auto tower : mDigits) {
     for (auto& digit : tower.second) {
+      if ( mRemoveDigitsBelowThreshold && (digit.GetAmplitude() < mSimParam->GetDigitThreshold() * (constants::EMCAL_ADCENERGY)) ) {
+        continue;
+      }
+
+      if (mSmearTimeEnergy) {
+        smearTimeEnergy(digit);
+      }
+
       l.push_front(digit);
     }
   }
@@ -121,6 +135,21 @@ void Digitizer::fillOutputContainer(std::vector<Digit>& digits)
   for (int index = 0; index < mMCTruthContainer.getIndexedSize(); ++index) {
     mMCTruthOutputContainer.addElements(index, mMCTruthContainer.getLabels(index));
   }
+}
+
+//_______________________________________________________________________
+void Digitizer::smearTimeEnergy(Digit& digit)
+{
+    Double_t energy = digit.GetAmplitude();
+    Double_t fluct = (energy*mSimParam->GetMeanPhotonElectron())/mSimParam->GetGainFluctuations();
+    energy *= mRandomGenerator->Poisson(fluct)/fluct;
+    energy += mRandomGenerator->Gaus(0., mSimParam->GetPinNoise());
+    digit.SetAmplitude(energy);
+    
+    Double_t res = mSimParam->GetTimeResolution(energy);
+    if (res > 0.) {
+      digit.setTimeStamp(mRandomGenerator->Gaus(digit.getTimeStamp(),res));
+    }
 }
 
 //_______________________________________________________________________

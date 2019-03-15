@@ -53,6 +53,7 @@ class SimParam
   Double_t GetTimeResolutionPar0() const { return mTimeResolutionPar0; }
   void SetTimeResolutionPar1(Double_t val) { mTimeResolutionPar1 = val; }
   Double_t GetTimeResolutionPar1() const { return mTimeResolutionPar1; }
+  Double_t GetTimeResolution(Double_t energy) const;
 
   void SetNADCED(Int_t val) { mNADCEC = val; }
   Int_t GetNADCEC() const { return mNADCEC; }
@@ -78,7 +79,7 @@ class SimParam
 
   SimParam() = default;
 
-  static o2::EMCAL::SimParam* mSimParam{ 0 }; // pointer to the unique instance of the class
+  static o2::EMCAL::SimParam* mSimParam; // pointer to the unique instance of the class
 
   // Digitizer
   Int_t mDigitThreshold{ 3 };              // Threshold for storing digits in EMC

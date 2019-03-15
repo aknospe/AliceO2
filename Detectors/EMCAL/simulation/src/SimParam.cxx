@@ -10,6 +10,11 @@
 
 #include "EMCALSimulation/SimParam.h"
 #include <iostream>
+#include <TMath.h>
+
+using namespace o2::EMCAL;
+
+SimParam* SimParam::mSimParam = 0;
 
 std::ostream& operator<<(std::ostream& stream, const o2::EMCAL::SimParam& s)
 {
@@ -17,7 +22,7 @@ std::ostream& operator<<(std::ostream& stream, const o2::EMCAL::SimParam& s)
   return stream;
 }
 
-void o2::EMCAL::SimParam::PrintStream(std::ostream& stream) const
+void SimParam::PrintStream(std::ostream& stream) const
 {
   stream << "EMCAL::SimParam.mDigitThreshold = " << mDigitThreshold;
   stream << "\nEMCAL::SimParam.mMeanPhotonElectron = " << mMeanPhotonElectron;
@@ -32,4 +37,18 @@ void o2::EMCAL::SimParam::PrintStream(std::ostream& stream) const
   stream << "\nEMCal::SimParam.mA = " << mA;
   stream << "\nEMCal::SimParam.mB = " << mB;
   stream << "\nEMCal::SimParam.mECPrimThreshold = " << mECPrimThreshold;
+}
+
+
+Double_t SimParam::GetTimeResolution(Double_t energy) const
+{
+  Double_t res = -1;
+  if (energy > 0)
+  {
+    res = TMath::Sqrt(mTimeResolutionPar0 + mTimeResolutionPar1/(energy*energy) );
+  }
+ 
+  // parametrization above is for ns. Convert to seconds:
+  //return res*1e-9;
+  return res;
 }
