@@ -26,7 +26,7 @@ class MCLabel : public o2::MCCompLabel
 
  public:
   MCLabel() = default;
-  MCLabel(Int_t trackID, Int_t eventID, Int_t srcID, Int_t time) : o2::MCCompLabel(trackID, eventID, srcID), mEventTime(time) {}
+  MCLabel(Int_t trackID, Int_t eventID, Int_t srcID, Double_t time) : o2::MCCompLabel(trackID, eventID, srcID), mEventTime(time) {}
   Double_t getEventTime() const { return mEventTime; }
   bool operator<(const MCLabel& other) const { return getEventTime() < other.getEventTime(); }
   bool operator>(const MCLabel& other) const { return getEventTime() > other.getEventTime(); }
