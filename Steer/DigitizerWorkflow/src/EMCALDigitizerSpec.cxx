@@ -59,13 +59,8 @@ DataProcessorSpec getEMCALDigitizerSpec(int channel)
   // the instance of the actual digitizer
   auto digitizer = std::make_shared<o2::emcal::Digitizer>();
 
-  // containers for digits and labels
-  auto digits = std::make_shared<std::vector<o2::emcal::Digit>>();
-  auto digitsAccum = std::make_shared<std::vector<o2::emcal::Digit>>(); // accumulator for all digits
-  auto labels = std::make_shared<o2::dataformats::MCTruthContainer<o2::MCCompLabel>>();
-
   // the actual processing function which get called whenever new data is incoming
-  auto process = [simChains, digitizer, digits, digitsAccum, labels, channel](ProcessingContext& pc) {
+  auto process = [simChains, digitizer, channel](ProcessingContext& pc) {
     static bool finished = false;
     if (finished) {
       return;
@@ -89,40 +84,48 @@ DataProcessorSpec getEMCALDigitizerSpec(int channel)
     LOG(INFO) << " CALLING EMCAL DIGITIZATION ";
 
     static std::vector<o2::emcal::Hit> hits;
-    o2::dataformats::MCTruthContainer<o2::MCCompLabel> labelAccum;
+
+    // containers for digits and labels
+    std::vector<o2::emcal::Digit> digitsAccum; // accumulator for all digits
+    o2::dataformats::MCTruthContainer<o2::MCCompLabel> labelAccum; // accumulator for all labels
 
     auto& eventParts = context->getEventParts();
     // loop over all composite collisions given from context
     // (aka loop over all the interaction records)
     for (int collID = 0; collID < timesview.size(); ++collID) {
-      digitizer->setEventTime(timesview[collID].timeNS);
+      // try to start new readout cycle by setting the trigger time
+      bool triggeraccepted = digitizer->setTriggerTime(timesview[collID].timeNS);
+      if (triggeraccepted) {
+          digitizer->fillOutputContainers(digitsAccum, labelAccum); // flush previous readout cycle
+      }
 
-      // for each collision, loop over the constituents event and source IDs
-      // (background signal merging is basically taking place here)
-      for (auto& part : eventParts[collID]) {
-        digitizer->setCurrEvID(part.entryID);
-        digitizer->setCurrSrcID(part.sourceID);
+      if (digitizer->setEventTime(timesview[collID].timeNS)) {
+        // for each collision, loop over the constituents event and source IDs
+        // (background signal merging is basically taking place here)
+        for (auto& part : eventParts[collID]) {
+          digitizer->setCurrEvID(part.entryID);
+          digitizer->setCurrSrcID(part.sourceID);
 
-        // get the hits for this event and this source
-        hits.clear();
-        retrieveHits(*simChains.get(), "EMCHit", part.sourceID, part.entryID, &hits);
+          // get the hits for this event and this source
+          hits.clear();
+          retrieveHits(*simChains.get(), "EMCHit", part.sourceID, part.entryID, &hits);
 
-        LOG(INFO) << "For collision " << collID << " eventID " << part.entryID << " found " << hits.size() << " hits ";
+          LOG(INFO) << "For collision " << collID << " eventID " << part.entryID << " found " << hits.size() << " hits ";
 
-        // call actual digitization procedure
-        labels->clear();
-        digits->clear();
-        digitizer->process(hits, *digits.get());
-        // copy digits into accumulator
-        std::copy(digits->begin(), digits->end(), std::back_inserter(*digitsAccum.get()));
-        labelAccum.mergeAtBack(*labels);
-        LOG(INFO) << "Have " << digits->size() << " digits ";
+          // call actual digitization procedure
+          digitizer->process(hits);
+        }
+      } else {
+        LOG(INFO) << "COLLISION " << collID << "FALLS WITHIN A DEAD TIME";
       }
     }
 
+    digitizer->fillOutputContainers(digitsAccum, labelAccum); // final flush
+
+    LOG(INFO) << "Have " << digitsAccum.size() << " EMCAL digits ";
     LOG(INFO) << "Have " << labelAccum.getNElements() << " EMCAL labels ";
     // here we have all digits and we can send them to consumer (aka snapshot it onto output)
-    pc.outputs().snapshot(Output{ "EMC", "DIGITS", 0, Lifetime::Timeframe }, *digitsAccum.get());
+    pc.outputs().snapshot(Output{ "EMC", "DIGITS", 0, Lifetime::Timeframe }, digitsAccum);
     pc.outputs().snapshot(Output{ "EMC", "DIGITSMCTR", 0, Lifetime::Timeframe }, labelAccum);
     LOG(INFO) << "EMCAL: Sending ROMode= " << roMode << " to GRPUpdater";
     pc.outputs().snapshot(Output{ "EMC", "ROMode", 0, Lifetime::Timeframe }, roMode);
@@ -136,7 +139,7 @@ DataProcessorSpec getEMCALDigitizerSpec(int channel)
   };
 
   // init function returning the lambda taking a ProcessingContext
-  auto initIt = [simChains, process, digitizer, labels](InitContext& ctx) {
+  auto initIt = [simChains, process, digitizer](InitContext& ctx) {
     // setup the input chain for the hits
     simChains->emplace_back(new TChain("o2sim"));
 

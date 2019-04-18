@@ -41,12 +41,8 @@ void Digitizer::init()
 void Digitizer::finish() {}
 
 //_______________________________________________________________________
-void Digitizer::process(const std::vector<Hit>& hits, std::vector<Digit>& digits)
+void Digitizer::process(const std::vector<Hit>& hits)
 {
-  digits.clear();
-  mDigits.clear();
-  mMCTruthContainer.clear();
-
   for (auto hit : hits) {
     try {
       Int_t LabelIndex = mMCTruthContainer.getIndexedSize();
@@ -78,8 +74,6 @@ void Digitizer::process(const std::vector<Hit>& hits, std::vector<Digit>& digits
       LOG(ERROR) << "Error in creating the digit: " << e.what() << FairLogger::endl;
     }
   }
-
-  fillOutputContainer(digits);
 }
 
 //_______________________________________________________________________
@@ -92,7 +86,27 @@ o2::emcal::Digit Digitizer::hitToDigit(const Hit& hit, const Int_t label)
 }
 
 //_______________________________________________________________________
-void Digitizer::setEventTime(double t)
+bool Digitizer::setTriggerTime(double t)
+{
+  // assign trigger time, it should be in a strictly increasing order
+  // convert to ns
+  t *= mCoeffToNanoSecond;
+
+  if (t < mCurrentTriggerTime && mContinuous) {
+    LOG(FATAL) << "New event time (" << t << ") is < previous event time (" << mCurrentTriggerTime << ")" << FairLogger::endl;
+  }
+
+  if (!mSimulatePileup || ((t - mCurrentTriggerTime) >= (constants::EMCAL_LIVETIME + constants::EMCAL_BUSYTIME)))
+  {
+    mCurrentTriggerTime = t;
+    return true;
+  }
+
+  return false;
+}
+
+//_______________________________________________________________________
+bool Digitizer::setEventTime(double t)
 {
   // assign event time, it should be in a strictly increasing order
   // convert to ns
@@ -101,11 +115,18 @@ void Digitizer::setEventTime(double t)
   if (t < mEventTime && mContinuous) {
     LOG(FATAL) << "New event time (" << t << ") is < previous event time (" << mEventTime << ")" << FairLogger::endl;
   }
-  mEventTime = t;
+
+  if (!mSimulatePileup || (t - mCurrentTriggerTime < constants::EMCAL_LIVETIME))
+  {
+    mEventTime = t;
+    return true;
+  }
+
+  return false;
 }
 
 //_______________________________________________________________________
-void Digitizer::fillOutputContainer(std::vector<Digit>& digits)
+void Digitizer::fillOutputContainers(std::vector<Digit>& digits, o2::dataformats::MCTruthContainer<o2::MCCompLabel>& labels)
 {
   std::forward_list<Digit> l;
 
@@ -128,6 +149,13 @@ void Digitizer::fillOutputContainer(std::vector<Digit>& digits)
   for (auto digit : l) {
     digits.push_back(digit);
   }
+
+  labels.mergeAtBack(mMCTruthContainer);
+
+  LOG(INFO) << "EMCAL: Flushed " << mDigits.size() << " digits and " << mMCTruthContainer.getNElements() << " labels";
+
+  mDigits.clear();
+  mMCTruthContainer.clear();
 }
 
 //_______________________________________________________________________

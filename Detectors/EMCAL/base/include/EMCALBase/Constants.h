@@ -28,6 +28,8 @@ namespace constants
 {
 constexpr Double_t EMCAL_TIMESAMPLE = 100.;  ///< Width of a timebin in nanoseconds
 constexpr Double_t EMCAL_ADCENERGY = 0.0167; ///< Energy of one ADC count in GeV/c^2
+constexpr Double_t EMCAL_LIVETIME = 1500.;   ///< Live time in nanoseconds
+constexpr Double_t EMCAL_BUSYTIME = 30000.;  ///< Busy time in nanoseconds
 } // namespace constants
 
 } // namespace emcal

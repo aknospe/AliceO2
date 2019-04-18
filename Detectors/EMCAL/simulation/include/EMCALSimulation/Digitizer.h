@@ -45,15 +45,19 @@ class Digitizer : public TObject
   void finish();
 
   /// Steer conversion of hits to digits
-  void process(const std::vector<Hit>& hits, std::vector<Digit>& digits);
+  void process(const std::vector<Hit>& hits);
 
-  void setEventTime(double t);
+  bool setTriggerTime(double t);
+  bool setEventTime(double t);
   double getEventTime() const { return mEventTime; }
 
   void setContinuous(bool v) { mContinuous = v; }
   bool isContinuous() const { return mContinuous; }
 
-  void fillOutputContainer(std::vector<Digit>& digits);
+  void fillOutputContainers(std::vector<Digit>& digits, o2::dataformats::MCTruthContainer<o2::MCCompLabel>& labels);
+
+  void setSimulatePileup(bool v = true) { mSimulatePileup = v; }
+  bool doSimulatePileup() const { return mSimulatePileup; }
 
   void setSmearTimeEnergy(bool v) { mSmearTimeEnergy = v; }
   bool doSmearTimeEnergy() const { return mSmearTimeEnergy; }
@@ -76,16 +80,18 @@ class Digitizer : public TObject
   Digit hitToDigit(const Hit& hit, const Int_t label);
 
  private:
-  const Geometry* mGeometry = nullptr; // EMCAL geometry
-  double mEventTime = 0;               ///< global event time
-  double mCoeffToNanoSecond = 1.0;     ///< coefficient to convert event time (Fair) to ns
-  bool mContinuous = false;            ///< flag for continuous simulation
-  UInt_t mROFrameMin = 0;              ///< lowest RO frame of current digits
-  UInt_t mROFrameMax = 0;              ///< highest RO frame of current digits
-  int mCurrSrcID = 0;                  ///< current MC source from the manager
-  int mCurrEvID = 0;                   ///< current event ID from the manager
-  bool mSmearTimeEnergy = true;        ///< do time and energy smearing
-  bool mRemoveDigitsBelowThreshold = true; // remove digits below threshold
+  const Geometry* mGeometry = nullptr;     ///< EMCAL geometry
+  double mCurrentTriggerTime = -1.0e20;    ///< current trigger time
+  double mEventTime = 0;                   ///< global event time
+  double mCoeffToNanoSecond = 1.0;         ///< coefficient to convert event time (Fair) to ns
+  bool mContinuous = false;                ///< flag for continuous simulation
+  UInt_t mROFrameMin = 0;                  ///< lowest RO frame of current digits
+  UInt_t mROFrameMax = 0;                  ///< highest RO frame of current digits
+  int mCurrSrcID = 0;                      ///< current MC source from the manager
+  int mCurrEvID = 0;                       ///< current event ID from the manager
+  bool mSimulatePileup = false;            ///< simulate pileup
+  bool mSmearTimeEnergy = true;            ///< do time and energy smearing
+  bool mRemoveDigitsBelowThreshold = true; ///< remove digits below threshold
   const SimParam* mSimParam = nullptr;     ///< SimParam object
 
   std::unordered_map<Int_t, std::deque<Digit>> mDigits; ///< used to sort digits by tower
@@ -95,7 +101,7 @@ class Digitizer : public TObject
 
   ClassDefOverride(Digitizer, 1);
 };
-} // namespace emcal
+} // namespace EMCAL
 } // namespace o2
 
 #endif /* ALICEO2_EMCAL_DIGITIZER_H */
