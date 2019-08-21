@@ -72,7 +72,7 @@ void Cell::setEnergyBits(Short_t ebits)
   ULong_t a = (ULong_t)ebits;
 
   a <<= 24;
-  ULong_t b = getLong() & 0xc00ffffff; // 1100000000000000111111111111111111111111
+  ULong_t b = getLong() & 0xc000ffffff; // 1100000000000000111111111111111111111111
   mBits = b + a;
 }
 
@@ -95,7 +95,7 @@ void Cell::setEnergy(Double_t energy)
     a = (ULong_t)((energy / (constants::EMCAL_ADCENERGY)*16.0) + 0.5);
 
   a <<= 24;
-  ULong_t b = getLong() & 0xc00ffffff; // 1100000000000000111111111111111111111111
+  ULong_t b = getLong() & 0xc000ffffff; // 1100000000000000111111111111111111111111
   mBits = b + a;
 }
 
