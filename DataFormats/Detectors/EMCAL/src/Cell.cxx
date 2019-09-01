@@ -8,14 +8,13 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
-#include "DataFormatsEMCAL/Constants.h"
 #include "DataFormatsEMCAL/Cell.h"
 #include <iostream>
 #include <bitset>
 
 using namespace o2::emcal;
 
-Cell::Cell(Short_t tower, Double_t energy, Double_t time, CellType ctype)
+Cell::Cell(Short_t tower, Double_t energy, Double_t time, ChannelType_t ctype)
 {
   setTower(tower);
   setTimeStamp(time);
@@ -104,27 +103,27 @@ Double_t Cell::getEnergy() const
   return getEnergyBits() * (constants::EMCAL_ADCENERGY) / 16.0;
 }
 
-void Cell::setType(CellType ctype)
+void Cell::setType(ChannelType_t ctype)
 {
-  if (ctype == CellType::kHighGain)
+  if (ctype == ChannelType_t::HIGH_GAIN)
     setHighGain();
-  else if (ctype == CellType::kLEDMon)
-    setLEDMon();
-  else if (ctype == CellType::kTRU)
+  else if (ctype == ChannelType_t::TRU)
     setTRU();
+  else if (ctype == ChannelType_t::LEDMON)
+    setLEDMon();
   else
     setLowGain();
 }
 
-UInt_t Cell::getType() const
+ChannelType_t Cell::getType() const
 {
   if (getHighGain())
-    return CellType::kHighGain;
-  else if (getLEDMon())
-    return CellType::kLEDMon;
+    return ChannelType_t::HIGH_GAIN;
   else if (getTRU())
-    return CellType::kTRU;
-  return CellType::kLowGain;
+    return ChannelType_t::TRU;
+  else if (getLEDMon())
+    return ChannelType_t::LEDMON;
+  return ChannelType_t::LOW_GAIN;
 }
 
 void Cell::setLowGain()
@@ -136,9 +135,7 @@ void Cell::setLowGain()
 Bool_t Cell::getLowGain() const
 {
   ULong_t t = (getLong() >> 38);
-  if (t)
-    return false;
-  return true;
+  return (!t);
 }
 
 void Cell::setHighGain()
@@ -150,37 +147,31 @@ void Cell::setHighGain()
 Bool_t Cell::getHighGain() const
 {
   ULong_t t = (getLong() >> 38);
-  if (t == 1)
-    return true;
-  return false;
-}
-
-void Cell::setLEDMon()
-{
-  ULong_t b = getLong() & 0x3fffffffff; // 0011111111111111111111111111111111111111
-  mBits = b + 0x8000000000;             // 1000000000000000000000000000000000000000
-}
-
-Bool_t Cell::getLEDMon() const
-{
-  ULong_t t = (getLong() >> 38);
-  if (t == 2)
-    return true;
-  return false;
+  return (t == 1);
 }
 
 void Cell::setTRU()
 {
   ULong_t b = getLong() & 0x3fffffffff; // 0011111111111111111111111111111111111111
-  mBits = b + 0xc000000000;             // 1100000000000000000000000000000000000000
+  mBits = b + 0x8000000000;             // 1000000000000000000000000000000000000000
 }
 
 Bool_t Cell::getTRU() const
 {
   ULong_t t = (getLong() >> 38);
-  if (t == 3)
-    return true;
-  return false;
+  return (t == 2);
+}
+
+void Cell::setLEDMon()
+{
+  ULong_t b = getLong() & 0x3fffffffff; // 0011111111111111111111111111111111111111
+  mBits = b + 0xc000000000;             // 1100000000000000000000000000000000000000
+}
+
+Bool_t Cell::getLEDMon() const
+{
+  ULong_t t = (getLong() >> 38);
+  return (t == 3);
 }
 
 void Cell::setLong(ULong_t l)

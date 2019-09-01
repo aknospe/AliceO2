@@ -33,7 +33,7 @@ class Digit : public DigitBase
  public:
   Digit() = default;
 
-  Digit(Short_t tower, Double_t energy, Double_t time);
+  Digit(Short_t tower, Double_t energy, Double_t time, ChannelType_t type = ChannelType_t::HIGH_GAIN);
   ~Digit() = default; // override
 
   bool operator<(const Digit& other) const { return getTimeStamp() < other.getTimeStamp(); }
@@ -58,6 +58,21 @@ class Digit : public DigitBase
   void setEnergy(Double_t energy) { mEnergy = energy; }
   Double_t getEnergy() const { return mEnergy; }
 
+  void setType(ChannelType_t ctype);
+  ChannelType_t getType() const;
+
+  void setLowGain() { mType = 0; }
+  Bool_t getLowGain() { return (!mType); }
+
+  void setHighGain() { mType = 1; }
+  Bool_t getHighGain() const { return (mType == 1); }
+
+  void setTRU() { mType = 2; }
+  Bool_t getTRU() const { return (mType == 2); }
+
+  void setLEDMon() { mType = 3; }
+  Bool_t getLEDMon() const { return (mType == 3); }
+
   void PrintStream(std::ostream& stream) const;
 
  private:
@@ -65,6 +80,7 @@ class Digit : public DigitBase
 
   Double_t mEnergy; ///< Energy (GeV/c^2)
   Short_t mTower;   ///< Tower index (absolute cell ID)
+  UChar_t mType;    ///< Type (Low Gain, High Gain, TRU, LEDMon)
 
   ClassDefNV(Digit, 1);
 };
