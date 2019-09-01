@@ -21,10 +21,12 @@
 #include "TRandom3.h"
 
 #include "DataFormatsEMCAL/Digit.h"
+#include "EMCALBase/LabeledDigit.h"
 #include "EMCALBase/Geometry.h"
 #include "EMCALBase/GeometryBase.h"
 #include "EMCALBase/Hit.h"
 #include "EMCALSimulation/SimParam.h"
+#include "EMCALSimulation/MCLabel.h"
 
 #include "SimulationDataFormat/MCCompLabel.h"
 #include "SimulationDataFormat/MCTruthContainer.h"
@@ -55,12 +57,16 @@ class Digitizer : public TObject
 
   void fillOutputContainer(std::vector<Digit>& digits);
 
-  void setSmearTimeEnergy(bool v) { mSmearTimeEnergy = v; }
-  bool doSmearTimeEnergy() const { return mSmearTimeEnergy; }
-  void smearTimeEnergy(Digit& digit);
+  void setSmearEnergy(bool v) { mSmearEnergy = v; }
+  bool doSmearEnergy() const { return mSmearEnergy; }
+  void smearEnergy(LabeledDigit& digit);
 
   void setRemoveDigitsBelowThreshold(bool v) { mRemoveDigitsBelowThreshold = v; }
   bool doRemoveDigitsBelowThreshold() const { return mRemoveDigitsBelowThreshold; }
+
+  void setSimulateNoiseDigits(bool v) { mSimulateNoiseDigits = v; }
+  bool doSimulateNoiseDigits() const { return mSimulateNoiseDigits; }
+  void addNoiseDigits();
 
   void setCoeffToNanoSecond(double cf) { mCoeffToNanoSecond = cf; }
   double getCoeffToNanoSecond() const { return mCoeffToNanoSecond; }
@@ -73,10 +79,13 @@ class Digitizer : public TObject
 
   void setGeometry(const o2::emcal::Geometry* gm) { mGeometry = gm; }
 
-  Digit hitToDigit(const Hit& hit, const Int_t label);
+  void hitToDigits(const Hit& hit);
+
+  static double rawResponseFunction(double* x, double* par);
+  /// raw pointers used here to allow interface with TF1
 
  private:
-  const Geometry* mGeometry = nullptr;     // EMCAL geometry
+  const Geometry* mGeometry = nullptr;     ///< EMCAL geometry
   double mEventTime = 0;                   ///< global event time
   double mCoeffToNanoSecond = 1.0;         ///< coefficient to convert event time (Fair) to ns
   bool mContinuous = false;                ///< flag for continuous simulation
@@ -84,14 +93,19 @@ class Digitizer : public TObject
   UInt_t mROFrameMax = 0;                  ///< highest RO frame of current digits
   int mCurrSrcID = 0;                      ///< current MC source from the manager
   int mCurrEvID = 0;                       ///< current event ID from the manager
-  bool mSmearTimeEnergy = true;            ///< do time and energy smearing
-  bool mRemoveDigitsBelowThreshold = true; // remove digits below threshold
+  bool mSmearEnergy = true;                ///< do time and energy smearing
+  bool mSimulateTimeResponse = true;       ///< simulate time response
+  bool mRemoveDigitsBelowThreshold = true; ///< remove digits below threshold
+  bool mSimulateNoiseDigits = true;        ///< simulate noise digits
   const SimParam* mSimParam = nullptr;     ///< SimParam object
 
-  std::unordered_map<Int_t, std::deque<Digit>> mDigits;                 ///< used to sort digits by tower
-  o2::dataformats::MCTruthContainer<o2::MCCompLabel> mMCTruthContainer; ///< contains MC truth information
+  std::vector<Digit> mTempDigitVector; ///< temporary digit storage
+  std::unordered_map<Int_t, std::list<LabeledDigit>> mDigits;            ///< used to sort digits and labels by tower
+  o2::dataformats::MCTruthContainer<o2::emcal::Label> mMCTruthContainer; ///< contains MC truth information
 
   TRandom3* mRandomGenerator = nullptr; // random number generator
+  Int_t mTimeBinOffset = 0;             // offset of first time bin
+  std::vector<double> mSignalFractionInTimeBins; // fraction of signal for each time bin
 
   ClassDefOverride(Digitizer, 1);
 };
